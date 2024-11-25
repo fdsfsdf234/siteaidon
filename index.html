@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Веб-страница с мультимедийным контентом</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            background-image: url('https://imgur.com/6me3gnR');
+            color: white;
+            text-align: center;
+        }
+
+        header {
+            color: #fff;
+            padding: 1em;
+            text-align: center;
+            max-width: 600px; 
+            margin: 0 auto;
+        }
+        .gallery-item {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.1); 
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-item:active {
+            transform: scale(1); 
+        }
+
+    @media only screen and (max-width: 768px) {
+        img {
+            object-fit: cover;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+
+        img.modal {
+            max-width: 90vw;
+            max-height: 85vh;
+        }
+    }
+
+   
+        #audio {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #f0f0f0;
+            border: 2px solid #e0e0e0;
+            border-radius: 20px;
+            padding: 20px;
+            max-width: 400px;
+            margin: 20px auto;
+            font-family: 'Roboto', sans-serif;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #audio h2 {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        #audio audio {
+            width: 100%;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        #audio audio::-webkit-media-controls-panel {
+            background-color: transparent;
+        }
+
+        #audio audio::-webkit-media-controls-play-button,
+        #audio audio::-webkit-media-controls-timeline {
+            filter: invert(100%);
+        }
+
+
+    #audioToggle {
+        padding: 13px 27px;
+        font-size: 18px;
+        color: #fff;
+        background: linear-gradient(45deg, #4caf50, #FFA500);
+        border: none;
+        border-radius: 8px; 
+        cursor: pointer;
+        font-weight: bold;
+        text-transform: uppercase;
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.25);
+        transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    }
+
+    #audioToggle:hover {
+        background: linear-gradient(45deg, #28CC2E, #DE9000);
+        transform: scale(1.05);
+        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    #audioToggle:active {
+                background: linear-gradient(45deg, #4caf50, #FFA500);
+
+        transform: scale(0.95);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+        #myVideo {
+            width: 80%;
+            height: auto; 
+            max-width: 850px; 
+        }
+
+        .control-button {
+            margin-top: 10px; 
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        .control-button:hover {
+            background-color: #0056b3; 
+        }
+
+    #videoToggle {
+        padding: 13px 27px; 
+        font-size: 18px;
+        color: #fff;
+        background: linear-gradient(45deg, #4caf50, #FFA500);
+        border: none;
+        border-radius: 8px; 
+        cursor: pointer;
+        font-weight: bold;
+        text-transform: uppercase;
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.25);
+        transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    }
+
+    #videoToggle:hover {
+        background: linear-gradient(45deg, #28CC2E, #DE9000);
+        transform: scale(1.05);
+        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    #videoToggle:active {
+                background: linear-gradient(45deg, #4caf50, #FFA500);
+
+        transform: scale(0.95);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+        .carousel-mainblock {
+            width: 100%;
+            height: 450px;
+            position: relative;
+        }
+
+        .cody {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .items {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            user-select: none;
+            width: 100%;
+            max-width: 400px;
+            max-height: 400px;
+            height: 100%;
+            transform-style: preserve-3d;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+
+        }
+        .items .item {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            border-radius: 5%;
+            border: 2px solid white;  
+            overflow: hidden;
+            transition: all 300ms ease-in-out;
+            z-index: -1;
+            opacity: 0;
+        }
+
+        .item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .item.active {
+            opacity: 1;
+            z-index: 99;
+            box-shadow: 0px 0px 105px -35px rgba(0, 0, 0, 0.75);
+        }
+        .item.prev {
+            z-index: 2;
+            opacity: 0.25;
+            transform: translate(-125%, -50%);
+        }
+        .item.next {
+            z-index: 2;
+            opacity: 0.25;
+            transform: translate(25%, -50%);
+        }
+
+        .items .button-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 325px;
+            z-index: 100;
+        }
+        @media only screen and (max-width: 376px) {
+            .item.active {
+                width: 130px;
+                box-shadow: 0px 0px 105px -35px rgba(0, 0, 0, 1);
+
+            }
+                .cody {
+            position: absolute;
+            top: 0;
+            right:10%;
+            width: 30%;
+            height: 400px;
+        }
+            .items .button-container {
+                width: 125px;
+            }
+        }
+        .carousel-box {
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            object-fit: cover;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex; 
+            justify-content: center; 
+
+        }
+        .circle-img {
+            width: 100%;
+            height: auto; 
+            display: flex; 
+            justify-content: center;
+            align-items: center; 
+            overflow: hidden;
+        }
+
+        .circle-img img {
+            width: 100%; 
+            height: auto; 
+            object-fit: cover;
+        }
+
+        @media only screen and (max-width: 768px) {
+            .circle-img {
+                width: 400px; 
+                height: 400px;
+            }
+            .circle-img img {
+                width: 100%;
+                height: auto; 
+            }
+        }
+
+        @media only screen and (max-width: 376px) {
+            .circle-img {
+                width: 150px; 
+                height: 150px;
+            }
+            .circle-img img {
+                width: 100%;
+                height: auto;
+            }
+        }
+
+        .button-container .button {
+            color: #fff;
+            font-size: 32px;
+            cursor: pointer;
+            position: relative;
+            opacity: 0.75;
+            transition: all 300ms ease-in-out;
+        }
+        .button-container .button:hover {
+            opacity: 1;
+        }
+        .button-container .button:before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px; 
+            background-color: rgba(0, 0, 0, 1);
+            border-radius: 50%;
+            border: 4px solid #fff;
+            z-index: -99;
+        }
+        @media only screen and (max-width: 376px) {
+            .button-container .button {
+            color: #fff;
+            font-size: 32px;
+            cursor: pointer;
+            position: relative;
+            opacity: 0.75;
+            transition: all 300ms ease-in-out;
+        }
+        .button-container .button:before {
+        content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30px;
+            height: 30px; 
+            background-color: rgba(0, 0, 0, 1);
+            border-radius: 50%;
+            border: 4px solid #e5944c;
+            z-index: -99;
+        }
+        }
+        .button-container .button i {
+            display: inline-block;
+        }
+        .button-container .button i:before {}
+        .button-container .button:first-child i:before {
+            content: "➭"; 
+            display: inline-block; 
+            transform: rotate(180deg); 
+            font-weight: 600;
+        }
+
+
+        .button-container .button:last-child i:before {
+            content: "➭"; 
+            font-weight: 600;
+        }
+        .button-container .button:nth-child(1) {
+            float: left;
+        }
+        .button-container .button:nth-child(2) {
+            float: right;
+        }
+        .button-viewroom {
+            background-color: #e5944c;
+            color: #ffffff;
+            border: 2px solid #e5944c; 
+            margin-top: 40px;
+            padding: 15px 15px;
+            font-family: "Khand", sans-serif;
+            font-weight: 600;
+            font-style: normal;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }   
+        .button-viewroom:hover {
+            background-color: #1d1d1d;
+            transform: scale(1.1);
+        }
+
+
+        video, audio {
+            display: block;
+            margin: 1em auto;
+            max-width: 100%;
+        }
+        .control-button {
+            background-color: #e5944c;
+            color: #ffffff;
+            border: none;
+            margin: 10px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            display: block;
+        }
+
+        .control-button:hover {
+            background-color: #1d1d1d;
+            transform: scale(1.1);
+        }
+
+        #interactive {
+            height: 400px;
+            text-align: center;
+            margin-top: 2em;
+            background: #f0f0f0;
+        }
+
+    @media only screen and (max-width: 768px) {
+        .carousel-mainblock {
+            height: 300px;
+        }
+
+        .items {
+            max-width: 300px;
+            max-height: 300px;
+        }
+
+        .items .item {
+            width: 100%;
+            height: 100%;
+            border-radius: 5%;
+            opacity: 0.8; 
+        }
+
+        .item.active {
+            opacity: 1;
+            box-shadow: none; 
+        }
+
+        .item.prev,
+        .item.next {
+            transform: translate(-90%, -50%);
+            opacity: 0.4; 
+        }
+
+        .circle-img {
+            width: 90%; 
+            height: auto;
+        }
+
+        .circle-img img {
+            object-fit: contain;
+        }
+
+        .button-container .button {
+            font-size: 24px; 
+        }
+
+        .button-container .button:before {
+            width: 40px;
+            height: 40px;
+        }
+
+        .button-container .button:hover {
+            opacity: 1;
+        }
+    }
+
+    @media only screen and (max-width: 480px) {
+        .carousel-mainblock {
+            height: 250px;
+        }
+
+        .items {
+            max-width: 250px;
+            max-height: 250px;
+        }
+
+        .circle-img {
+            width: 100%;
+        }
+
+        .items .button-container {
+            width: 150px;
+        }
+
+        .button-container .button {
+            font-size: 18px;
+        }
+
+        .button-container .button:before {
+            width: 30px;
+            height: 30px;
+        }
+    }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Освоить работу с мультимедийными элементами в HTML5.</h1>
+        <p>Научиться стилизовать и адаптировать мультимедийные элементы с помощью CSS. Изучить основы взаимодействия с мультимедийными элементами через JavaScript.</p>
+    </header>
+    <section id="gallery">
+        <h2>Галерея изображений</h2>
+        <div class="gallery">
+            <img src="https://github.com/fdsfsdf234/aidon/blob/main/image1.jpg" alt="Изображение 1" class="gallery-item">
+            <img src="https://github.com/fdsfsdf234/aidon/blob/main/image3.jpg" alt="Изображение 2" class="gallery-item">
+            <img src="https://github.com/fdsfsdf234/aidon/blob/main/image2.jpg" alt="Изображение 3" class="gallery-item">
+        </div>
+    </section>
+
+
+    <section id="video">
+        <h2>Видео-контент</h2>
+        <video id="myVideo" controls>
+            <source src="https://raw.githubusercontent.com/fdsfsdf234/aidon/main/video.mp4" type="video/mp4">
+            Ваш браузер не поддерживает видео.
+        </video>
+        <button id="videoToggle" class="control-button">Воспроизвести</button>
+    </section>
+
+    <section id="audio">
+        <h2>Аудиоконтент</h2>
+        <audio id="myAudio" controls>
+            <source src="https://raw.githubusercontent.com/fdsfsdf234/aidon/main/lab2.mp3" type="audio/mp3">
+            Ваш браузер не поддерживает аудио.
+        </audio>
+        <button id="audioToggle" class="control-button">Воспроизвести</button>
+    </section>
+
+
+
+
+    <h2>Интерактивный контент</h2>
+    <div class="carousel-mainblock">
+     <div class="cody">   
+         <div class="items">
+             <div class="item active">
+                 <div class="carousel-box" alt="song">
+                    <div class="circle-img">
+                        <img src="https://github.com/fdsfsdf234/aidon/blob/main/image1.jpg?raw=true" alt="Avatar">
+                    </div>
+                </div>
+             </div>
+             <div class="item next">
+                <div class="carousel-box" alt="song">
+                    <div class="circle-img">
+                        <img src="https://github.com/fdsfsdf234/aidon/blob/main/image2.jpg?raw=true" alt="Avatar">
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="carousel-box" alt="song">
+                    <div class="circle-img">
+                        <img src="https://github.com/fdsfsdf234/aidon/blob/main/image3.jpg?raw=true" alt="Avatar">
+                    </div>
+                </div>
+            </div>
+            <div class="item prev">
+                <div class="carousel-box" alt="song">
+                    <div class="circle-img">
+                        <img src="https://github.com/fdsfsdf234/aidon/blob/main/image4.jpg?raw=true" alt="Avatar">
+                    </div>
+                </div>
+             </div>
+            <div class="button-container">
+                <div class="button"><i class="fas fa-angle-left"></i></div>
+                <div class="button"><i class="fas fa-angle-right"></i></div>
+            </div>
+         </div>
+    </div>
+</div> 
+<script>
+        document.querySelectorAll('.gallery-item').forEach(image => {
+            image.addEventListener('click', () => {
+                const imgSrc = image.src;
+
+                const modal = document.createElement('div');
+                modal.style.position = 'fixed';
+                modal.style.top = '0';
+                modal.style.left = '0';
+                modal.style.width = '100vw';
+                modal.style.height = '100vh';
+                modal.style.background = 'rgba(0, 0, 0, 0.8)';
+                modal.style.display = 'flex';
+                modal.style.justifyContent = 'center';
+                modal.style.alignItems = 'center';
+                modal.style.zIndex = '9999';
+
+                const modalImage = document.createElement('img');
+                modalImage.src = imgSrc;
+                modalImage.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+                modalImage.style.maxWidth = '90%';
+                modalImage.style.maxHeight = '90%';
+                modalImage.style.border = '4px solid white';
+                modalImage.style.borderRadius = '10px';
+                modalImage.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.6)';
+                modalImage.style.cursor = 'zoom-out';
+
+                modal.appendChild(modalImage);
+
+    
+                modal.addEventListener('click', () => {
+                    modal.style.opacity = '0';
+                    setTimeout(() => modal.remove(), 300); 
+                });
+
+                document.body.appendChild(modal);
+
+              
+                setTimeout(() => {
+                    modal.style.opacity = '1';
+                }, 10);
+            });
+        });
+
+
+        const initSlider = (container) => {
+                const slider = container.querySelector(".items");
+                const slides = container.querySelectorAll(".item");
+                const buttons = container.querySelectorAll(".button");
+
+                let current = 0;
+                let prev = slides.length - 1;
+                let next = 1;
+                for (let i = 0; i < buttons.length; i++) {
+                    buttons[i].addEventListener("click", () => i == 0 ? gotoPrev() : gotoNext());
+                }
+
+                const gotoPrev = () => current > 0 ? gotoNum(current - 1) : gotoNum(slides.length - 1);
+
+                const gotoNext = () => current < slides.length - 1 ? gotoNum(current + 1) : gotoNum(0);
+
+                const gotoNum = (number) => {
+                    current = number;
+                    prev = current - 1;
+                    next = current + 1;
+
+                    for (let i = 0; i < slides.length; i++) {
+                        slides[i].classList.remove("active");
+                        slides[i].classList.remove("prev");
+                        slides[i].classList.remove("next");
+                    }
+
+                    if (next == slides.length) {
+                        next = 0;
+                    }
+
+                    if (prev == -1) {
+                        prev = slides.length - 1;
+                    }
+
+                    slides[current].classList.add("active");
+                    slides[prev].classList.add("prev");
+                    slides[next].classList.add("next");
+                };
+            };
+
+
+
+            const carousels = document.querySelectorAll(".carousel-mainblock");
+            carousels.forEach(initSlider);
+            document.addEventListener("DOMContentLoaded", () => {
+
+            const video = document.getElementById("myVideo");
+            const videoToggle = document.getElementById("videoToggle");
+
+            videoToggle.addEventListener("click", () => {
+                if (video.paused) {
+                    video.play();
+                    videoToggle.textContent = "Пауза";
+                } else {
+                    video.pause();
+                    videoToggle.textContent = "Воспроизвести";
+                }
+            });
+
+
+            const audio = document.getElementById("myAudio");
+            const audioToggle = document.getElementById("audioToggle");
+
+            audioToggle.addEventListener("click", () => {
+                if (audio.paused) {
+                    audio.play();
+                    audioToggle.textContent = "Пауза";
+                } else {
+                    audio.pause();
+                    audioToggle.textContent = "Воспроизвести";
+                }
+            });
+        });
+
+    </script>
+  
+</body>
+</html>
